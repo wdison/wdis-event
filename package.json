@@ -1,0 +1,30 @@
+{
+  "name": "@wdis/event",
+  "version": "1.0.0",
+  "description": "@wdis/event",
+  "main": "dist/index.js",
+  "scripts": {
+    "buildNcc": "ncc build src/wdis.event.js --no-cache -o dist/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wdison/wdis-event.git"
+  },
+  "keywords": [
+    "wdis",
+    "event"
+  ],
+  "author": "Wdison",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/wdison/wdis-event/issues"
+  },
+  "homepage": "https://github.com/wdison/wdis-event#readme",
+  "files": [
+    "./dist"
+  ],
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.1"
+  }
+}
