@@ -2,9 +2,12 @@
   "name": "@wdis/event",
   "version": "1.0.0",
   "description": "@wdis/event",
-  "main": "dist/index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "scripts": {
     "buildNcc": "ncc build src/wdis.event.js --no-cache -o dist/",
+    "tsc2": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,6 +28,10 @@
     "./dist"
   ],
   "devDependencies": {
-    "@vercel/ncc": "^0.38.1"
+    "@vercel/ncc": "^0.38.1",
+    "@types/node": "^20.11.20",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.3.3"
   }
 }

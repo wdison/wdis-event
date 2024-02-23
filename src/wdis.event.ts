@@ -1,12 +1,13 @@
-class WdisEvent {
-    #wdisEvent;
+export class WdisEvent {
+    #wdisEvent:any;
+    
     constructor() {
         this.#wdisEvent = {};
     }
-    emit(eventName, param) {
+    emit(eventName:any, param:any) {
         return this.trigger(eventName, param);
     }
-    trigger(eventName, param) {
+    trigger(eventName:any, param:any) {
         if (!(typeof eventName === 'string')) {
             console.error('nome do evento deve ser do tipo string');
             return;
@@ -14,7 +15,7 @@ class WdisEvent {
         var events = this.#wdisEvent[eventName];
         if (events) {
             setTimeout(() => {
-                events.forEach(onEventFnc => {
+                events.forEach((onEventFnc:any) => {
                     setTimeout(() => {
                         try {
                             if(arguments.length==2){
@@ -36,8 +37,8 @@ class WdisEvent {
         return this;
     }
 
-    intercept(eventName, param) {
-        return new Promise(async (accept, reject)=>{
+    intercept(eventName:any, param:any) {
+        return new Promise(async (accept:any, reject:any)=>{
             if (!(typeof eventName === 'string')) {
                 console.error('nome do evento deve ser do tipo string');
                 accept();
@@ -66,7 +67,7 @@ class WdisEvent {
         });
     }
 
-    on(eventName, onEventFnc) {
+    on(eventName:any, onEventFnc:any) {
         if (!(typeof eventName === 'string')) {
             console.error('nome do evento deve ser do tipo string');
             return;
@@ -86,6 +87,4 @@ class WdisEvent {
     }
 }
 
-const wdisEvent = new WdisEvent();
-wdisEvent.WdisEvent = WdisEvent;
-module.exports = wdisEvent;
+export const wdisEvent = new WdisEvent();
