@@ -4,10 +4,10 @@ export class WdisEvent {
     constructor() {
         this.#wdisEvent = {};
     }
-    emit(eventName:any, param:any) {
+    emit(eventName:any, ...param:any) {
         return this.trigger(eventName, param);
     }
-    trigger(eventName:any, param:any) {
+    trigger(eventName:any, ...param:any) {
         if (!(typeof eventName === 'string')) {
             console.error('nome do evento deve ser do tipo string');
             return;
@@ -37,7 +37,7 @@ export class WdisEvent {
         return this;
     }
 
-    intercept(eventName:any, param:any) {
+    intercept(eventName:any, ...param:any) {
         return new Promise(async (accept:any, reject:any)=>{
             if (!(typeof eventName === 'string')) {
                 console.error('nome do evento deve ser do tipo string');
