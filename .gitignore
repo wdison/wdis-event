@@ -130,5 +130,4 @@ dist
 .pnp.*
 
 
-src/teste.ts
-src/teste_private.ts
+test/

@@ -1,6 +1,6 @@
 {
   "name": "@wdis/event",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "@wdis/event",
   "main": "./index.js",
   "module": "./index.esm",
