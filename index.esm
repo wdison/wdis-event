@@ -1,0 +1,4 @@
+import {WdisEvent, wdisEvent} from './dist/esm/wdis.event';
+
+const idxEvent = { WdisEvent, wdisEvent };
+export default idxEvent;
