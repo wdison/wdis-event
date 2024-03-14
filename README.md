@@ -9,7 +9,8 @@ Or
 
 ## Example of Global Events
 ```js
-import { wdisEvent } from "./wdis.event";
+import { wdisEvent } from "@wdis/event";
+// const { wdisEvent } = require('@wdis/event');
 
 const custonCallBack = (obj: any) => {
     console.log('on event');
@@ -40,7 +41,8 @@ setTimeout(async () => {
 
 ## Example of Private Object Events and One Global
 ```js
-import { WdisEvent, wdisEvent } from "./wdis.event";
+import { WdisEvent, wdisEvent } from "@wdis/event";
+// const {WdisEvent, wdisEvent} = require('@wdis/event');
 
 class ObjPrivate extends WdisEvent {
     public static CUSTOM_EVENT_GLOBAL       = 'objprivate:change';
