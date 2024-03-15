@@ -1,14 +1,16 @@
 {
   "name": "@wdis/event",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "description": "@wdis/event",
   "main": "./index.js",
   "module": "./index.esm",
   "types": "./index.d.ts",
   "typings": "./index.d.ts",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon -e ts,json --exec node --experimental-specifier-resolution=node --loader ts-node/esm src/index.ts",
-    "build_TSC": "tsc -p tsconfig.json | tsc -p tsconfig-cjs.json"
+    "devTestGlobal":    "nodemon -e ts,json --exec node --experimental-specifier-resolution=node --loader ts-node/esm test/teste_global.ts",
+    "devTestPrivate":   "nodemon -e ts,json --exec node --experimental-specifier-resolution=node --loader ts-node/esm test/teste_private.ts",
+    "build_TSC":        "tsc -p tsconfig.json | tsc -p tsconfig-cjs.json"
   },
   "repository": {
     "type": "git",

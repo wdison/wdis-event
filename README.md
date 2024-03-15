@@ -9,8 +9,8 @@ Or
 
 ## Example of Global Events
 ```js
-import { wdisEvent } from "@wdis/event";
 // const { wdisEvent } = require('@wdis/event');
+import { wdisEvent } from "@wdis/event";
 
 const custonCallBack = (obj: any) => {
     console.log('on event');
@@ -41,9 +41,10 @@ setTimeout(async () => {
 
 ## Example of Private Object Events and One Global
 ```js
-import { WdisEvent, wdisEvent } from "@wdis/event";
 // const {WdisEvent, wdisEvent} = require('@wdis/event');
+import { WdisEvent, wdisEvent } from "@wdis/event";
 
+let _selfObj:ObjPrivate|null = null;
 class ObjPrivate extends WdisEvent {
     public static CUSTOM_EVENT_GLOBAL       = 'objprivate:change';
     
@@ -53,6 +54,7 @@ class ObjPrivate extends WdisEvent {
     private wdisEventGlobal: WdisEvent;
     constructor(){
         super();
+        _selfObj = this;
         this.initCustomEvents();
         this.wdisEventGlobal = wdisEvent;
     }
@@ -64,18 +66,18 @@ class ObjPrivate extends WdisEvent {
     onChange(objChanged: {name:string}) {
         console.log(objChanged.name);
         // to external listening
-        this.wdisEventGlobal.emit('objprivate:change', objChanged);
+        _selfObj?.wdisEventGlobal.emit('objprivate:change', objChanged);
     }
-    onCustomEventPrivate2() {
+    onCustomEventPrivate() {
         console.log('onCustomEventPrivate2');
-        this.emit(ObjPrivate.CHANGE, {name: 'private2'});
+        _selfObj?.emit(ObjPrivate.CHANGE, {name: 'emited from private'});
     }
-    onCustomEventPrivate(customParam1: any, customParam2: any, customParam3: any) {
+    onCustomEventPrivate2(customParam1: any, customParam2: any, customParam3: any) {
         console.log('onCustomEventPrivate with 3 custom params');
         console.log(customParam1);
         console.log(customParam2);
         console.log(customParam3);
-        this.emit(ObjPrivate.CHANGE, {name: 'private'});
+        _selfObj?.emit(ObjPrivate.CHANGE, {name: 'emited from private2'});
     }
 }
 
@@ -89,10 +91,11 @@ const custonCallBackExternal = (obj: any) => {
     if (obj && obj.customKey_2) {
         console.log(obj.customKey_2);
     }
+    return "Return from custonCallBackExternal to be used in interceptor";
 };
 
 // set new event listening 
-wdisEventPrivateObj.on(ObjPrivate.CUSTOM_EVENT_PRAIVATE,    custonCallBackExternal);
+wdisEventPrivateObj.on(ObjPrivate.CUSTOM_EVENT_PRAIVATE2,    custonCallBackExternal);
 wdisEventPrivateObj.on('new:custom:event:private',          custonCallBackExternal);
 
 // sending events with emit or trigger is the same thing
@@ -107,7 +110,9 @@ setTimeout(() => {
 // sending events with interception can use them together with await, from the asynchronous function, to wait for success or error in an execution.
 setTimeout(async () => {
     // Waiting for the end of the promise
-    await wdisEventPrivateObj.intercept('new:custom:event:private', {customKey_1: 'Test here using customKey_1 in event new:custom:event:private'});
-    await wdisEventPrivateObj.intercept(ObjPrivate.CUSTOM_EVENT_PRAIVATE2, {customKey_1: 'Test here using customKey_1'});
+    let result1 = await wdisEventPrivateObj.intercept('new:custom:event:private', {customKey_1: 'Test here using customKey_1 in event new:custom:event:private'});
+    let result2 = await wdisEventPrivateObj.intercept(ObjPrivate.CUSTOM_EVENT_PRAIVATE2, {customKey_1: 'Test here using customKey_1'});
+    console.log('result1: '+JSON.stringify(result1));
+    console.log('result2: '+JSON.stringify(result2));
 }, 4000);
 ```

@@ -4,10 +4,10 @@ export class WdisEvent {
     constructor() {
         this.#wdisEvent = {};
     }
-    emit(eventName:any, ...param:any) {
-        return this.trigger(eventName, param);
+    public emit(eventName:any, ...param:any) {
+        return this.trigger(eventName, ...param);
     }
-    trigger(eventName:any, ...param:any) {
+    public trigger(eventName:any, ...param:any) {
         if (!(typeof eventName === 'string')) {
             console.error('nome do evento deve ser do tipo string');
             return;
@@ -18,13 +18,7 @@ export class WdisEvent {
                 events.forEach((onEventFnc:any) => {
                     setTimeout(() => {
                         try {
-                            if(arguments.length==2){
-                                onEventFnc(param);
-                            }else if(arguments.length==3){
-                                onEventFnc(param,arguments[2]);
-                            }else if(arguments.length==4){
-                                onEventFnc(param,arguments[2],arguments[3]);
-                            }
+                            onEventFnc(...param);
                         } catch (error) {
                             console.error(error);
                         }
@@ -37,37 +31,38 @@ export class WdisEvent {
         return this;
     }
 
-    intercept(eventName:any, ...param:any) {
+    public intercept(eventName:any, ...param:any) {
         return new Promise(async (accept:any, reject:any)=>{
             if (!(typeof eventName === 'string')) {
                 console.error('nome do evento deve ser do tipo string');
                 accept();
                 return;
             } else {
+                let result:any[]|any|undefined=[];
                 var events = this.#wdisEvent[eventName];
                 if (events) {
                     for(let onEventFnc of events){
                         try {
                             let excResult = undefined;
-                            if(arguments.length==2){
-                                excResult = onEventFnc(param);
-                            }else if(arguments.length==3){
-                                excResult = onEventFnc(param,arguments[2]);
-                            }else if(arguments.length==4){
-                                excResult = onEventFnc(param,arguments[2],arguments[3]);
-                            }
+                            excResult = onEventFnc(...param);
                             excResult && excResult.then && await excResult;
+                            result.push(excResult);
                         } catch (error) {
                             console.error(error);
                         }
                     }
                 }
-                accept();
+                if(result.length==0){
+                    result = undefined;
+                }else if(result.length==1){
+                    result = result[0];
+                }
+                accept(result);
             }
         });
     }
 
-    on(eventName:any, onEventFnc:any) {
+    public on(eventName:any, onEventFnc:any) {
         if (!(typeof eventName === 'string')) {
             console.error('nome do evento deve ser do tipo string');
             return;
@@ -86,5 +81,6 @@ export class WdisEvent {
         return this;
     }
 }
+console.log('Teste wdi event');
 
 export const wdisEvent = new WdisEvent();
