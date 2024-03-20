@@ -1,18 +1,11 @@
 export class WdisEvent {
-    #wdisEvent:any;
+    private eventsWdis: { [key: string]: Function[] } = {};
     
-    constructor() {
-        this.#wdisEvent = {};
+    public emit(eventName:string, ...param:any):void {
+        this.trigger(eventName, ...param);
     }
-    public emit(eventName:any, ...param:any) {
-        return this.trigger(eventName, ...param);
-    }
-    public trigger(eventName:any, ...param:any) {
-        if (!(typeof eventName === 'string')) {
-            console.error('nome do evento deve ser do tipo string');
-            return;
-        }
-        var events = this.#wdisEvent[eventName];
+    public trigger(eventName:string, ...param:any):void {
+        var events = this.eventsWdis[eventName];
         if (events) {
             setTimeout(() => {
                 events.forEach((onEventFnc:any) => {
@@ -28,10 +21,9 @@ export class WdisEvent {
         }else{
             // console.log('event not found '+eventName);
         }
-        return this;
     }
 
-    public intercept(eventName:any, ...param:any) {
+    public intercept(eventName:string, ...param:any):Promise<any> {
         return new Promise(async (accept:any, reject:any)=>{
             if (!(typeof eventName === 'string')) {
                 console.error('nome do evento deve ser do tipo string');
@@ -39,7 +31,7 @@ export class WdisEvent {
                 return;
             } else {
                 let result:any[]|any|undefined=[];
-                var events = this.#wdisEvent[eventName];
+                var events = this.eventsWdis[eventName];
                 if (events) {
                     for(let onEventFnc of events){
                         try {
@@ -62,25 +54,33 @@ export class WdisEvent {
         });
     }
 
-    public on(eventName:any, onEventFnc:any) {
-        if (!(typeof eventName === 'string')) {
-            console.error('nome do evento deve ser do tipo string');
-            return;
+    public on(eventName:string, onEventFnc:Function): WdisEvent {
+        if (!this.eventsWdis[eventName]) {
+            this.eventsWdis[eventName] = [];
         }
-        if (!(onEventFnc && typeof onEventFnc === 'function')) {
-            console.error('a funçao do evento '+eventName+' deve ser do tipo function');
-            return;
-        }
-
-        var events = this.#wdisEvent[eventName];
-        if (events) {
-            events.push(onEventFnc);
-        } else {
-            this.#wdisEvent[eventName] = [onEventFnc];
-        }
+        this.eventsWdis[eventName].push(onEventFnc);
         return this;
     }
-}
-console.log('Teste wdi event');
 
-export const wdisEvent = new WdisEvent();
+    public exportNames(){
+        return Object.keys(this.eventsWdis);
+    }
+}
+
+class GlobalWdiEvent {
+    private static wdisEvent:WdisEvent;
+    private static _instance:GlobalWdiEvent|null;
+    private constructor() {
+        if(!GlobalWdiEvent.wdisEvent) {
+            GlobalWdiEvent.wdisEvent = new WdisEvent();
+        }
+    }
+    static getGlobal(){
+        if(!GlobalWdiEvent._instance) {
+            GlobalWdiEvent._instance = new GlobalWdiEvent();
+        }
+        return GlobalWdiEvent.wdisEvent;
+    }
+}
+
+export const wdisEvent = GlobalWdiEvent.getGlobal();
