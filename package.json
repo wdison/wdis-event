@@ -7,9 +7,12 @@
   "types": "./index.d.ts",
   "typings": "./index.d.ts",
   "scripts": {
-    "devTestWdisEventGlobal": "ts-node-dev -P tsconfig-cjs.json test/teste_global.ts",
-    "devTestWdisEventPrivate": "ts-node-dev -P tsconfig-cjs.json test/teste_private.ts",
-    "build_TSC": "tsc -p tsconfig.json | tsc -p tsconfig-cjs.json"
+    "link:this:Projet": "npm link && npm link @wdis/event",
+    "devtest:JS": "node ./test/teste.js",
+    "devtest:WdisEventGlobal": "ts-node-dev -P tsconfig-cjs.json test/teste_global.ts",
+    "devtest:WdisEventPrivate": "ts-node-dev -P tsconfig-cjs.json test/teste_private.ts",
+    "build_TSC": "tsc -p tsconfig.json | tsc -p tsconfig-cjs.json",
+    "spec": "jest"
   },
   "repository": {
     "type": "git",
@@ -32,6 +35,9 @@
     "./index.d.ts"
   ],
   "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
